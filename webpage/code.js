@@ -95,6 +95,5 @@ function updateCountdown(dueTime, offset) {
         boxes.forEach(box => box.classList.add("green"));
     }
 }
-    return false;
-}
+
 
