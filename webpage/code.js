@@ -45,5 +45,56 @@ function validateForm() {
         document.appForm.submit();
     }, 1500);
 
+    
+// Update Countdown
+function updateCountdown(dueTime, offset) {
+    let now = Date.now() + offset;
+    let diff = dueTime - now;
+
+    // Calculate remaining times
+    let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    let hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    let minutes = Math.floor((diff / (1000 * 60)) % 60);
+    let seconds = Math.floor((diff / 1000) % 60);
+
+    // Update numbers
+    document.getElementById("cd-days").textContent = Math.max(days, 0);
+    document.getElementById("cd-hours").textContent = hours.toString().padStart(2, '0');
+    document.getElementById("cd-minutes").textContent = minutes.toString().padStart(2, '0');
+    document.getElementById("cd-seconds").textContent = seconds.toString().padStart(2, '0');
+
+    // Get all boxes
+    let boxes = document.querySelectorAll(".countdown-box");
+
+    // clear box styling
+    boxes.forEach(box => {
+        box.classList.remove("green", "yellow", "red", "flash");
+    });
+
+    // change the styling of the boxes based on time remaining 
+    if (diff <= 0) {
+        // Overdue
+        boxes.forEach(box => box.classList.add("flash"));
+        return;
+    }
+
+    if (diff < 0) {  
+        // Past due
+        boxes.forEach(box => box.classList.add("flash"));
+    }
+    else if (diff < (24*60*60)) {  
+        // Due today
+        boxes.forEach(box => box.classList.add("red"));
+    }
+    else if (diff < 7*24*60*60) { 
+        // Due within a week
+        boxes.forEach(box => box.classList.add("yellow"));
+    }
+    else {
+        // Due greater than a week
+        boxes.forEach(box => box.classList.add("green"));
+    }
+}
     return false;
 }
+
