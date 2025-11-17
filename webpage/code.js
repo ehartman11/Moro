@@ -45,7 +45,9 @@ function validateForm() {
         document.appForm.submit();
     }, 1500);
 
-    
+    return false;
+}
+
 // Update Countdown
 function updateCountdown(dueTime, offset) {
     let now = Date.now() + offset;
@@ -95,5 +97,6 @@ function updateCountdown(dueTime, offset) {
         boxes.forEach(box => box.classList.add("green"));
     }
 }
+
 
 
