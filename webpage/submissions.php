@@ -17,13 +17,7 @@ $email = $_POST['email'] ?? null;
 <body>
 
     <!-- navigation bar -->
-    <nav class="nav">
-        <a href="index.php" class="nav-logo">Moro</a>
-        <ul>
-            <li><a href="index.php">Home</a></li>
-            <li><a href="submissions.php">Submissions</a></li>
-        </ul>
-    </nav>
+    <?php include 'nav_bar.php'; ?>
 
     <!-- Simple display for showcasing the information from the submitted form -->
     <section>
@@ -46,3 +40,4 @@ $email = $_POST['email'] ?? null;
 
 </body>
 </html>
+
