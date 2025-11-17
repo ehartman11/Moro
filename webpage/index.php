@@ -21,15 +21,8 @@
         </p>
     </header>
 
-    <!-- Navigation bar -->
-    <nav class="nav">
-        <!-- hyperlinks to various pages -->
-        <a href="index.php" class="nav-logo">Moro</a>
-        <ul>
-            <li><a href="index.php">Home</a></li>
-            <li><a href="submissions.php">Submissions</a></li>
-        </ul>
-    </nav>
+    <!-- navigation bar -->
+    <?php include 'nav_bar.php'; ?>
 
     <!-- Checklist describing some of the features the app accomplishes -->
     <section class="benefit-list">
@@ -138,4 +131,5 @@
     </div>
 
 </body>
+
 </html>
