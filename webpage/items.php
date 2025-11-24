@@ -1,13 +1,13 @@
 <?php
 require_once "db_conn.php";
 
-// Flags for UI feedback
+// States to track user actions and errors
 $updateSuccess = false;
 $updateError   = "";
 $addSuccess    = false;
 $addError      = "";
 
-// ---------- Handle ADD ITEM submission ----------
+// Handle add item submission 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['add_item'])) {
     $name          = trim($_POST["name"] ?? "");
     $category      = trim($_POST["category"] ?? "");
@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['add_item'])) {
     }
 }
 
-// ---------- Handle UPDATE ITEM submission ----------
+// Handle update item submission
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_item'])) {
     $id            = (int)($_POST['id'] ?? 0);
     $name          = trim($_POST['name'] ?? "");
@@ -95,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_item'])) {
     }
 }
 
-// ---------- Handle DELETE ITEM request ----------
+// Handle delete item request
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['delete_item'])) {
     $id = (int)($_POST['id'] ?? 0);
 
@@ -114,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['delete_item'])) {
     }
 }
 
-// ---------- Fetch all items for the left tree ----------
+// Fetch all items for the left tree 
 $stmt = $pdo->query("
     SELECT id, name, category, brand, model, serial_number
     FROM items
@@ -132,7 +132,7 @@ foreach ($items as $item) {
     $tree[$cat][] = $item;
 }
 
-// ---------- Handle selected item (for details panel) ----------
+// Handle selected item: displays item data to the table/form 
 $selectedItem = null;
 if (isset($_GET['item_id'])) {
     $itemId = (int) $_GET['item_id'];
@@ -166,7 +166,7 @@ if (isset($_GET['item_id'])) {
             return confirm("Are you sure you want to save these changes?");
         }
 
-        // Simple tab switching
+        // Tab switching
         function showTab(tabId) {
             const tabs = document.querySelectorAll('.item-tab');
             tabs.forEach(t => t.style.display = 'none');
@@ -180,13 +180,13 @@ if (isset($_GET['item_id'])) {
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            // If we're on the details view, default to Details tab
+            // Default to the details view 
             const defaultTab = document.getElementById('tab-details');
             if (defaultTab) {
                 showTab('tab-details');
             }
 
-            // Auto-hide popup (in case code.js doesn't already handle it)
+            // Auto-hide popup
             const popup = document.querySelector(".popup.show");
             if (popup) {
                 setTimeout(() => popup.classList.add("hide"), 2000);
@@ -435,15 +435,16 @@ if (isset($_GET['item_id'])) {
                 </form>
             </section>
 
-            <!-- Tab: Maintenance (placeholder for now) -->
+            <!-- Tab: Maintenance -->
+            <!-- TODO: create a new display for Maintenance needed for the item selected -->
             <section id="tab-maintenance" class="item-tab" style="display:none;">
                 <p class="muted">
                     This will show all scheduled and completed maintenance tasks for this item.
-                    (Hook into <code>maintenance_tasks</code>, <code>task_schedule</code>, and <code>task_history</code> later.)
                 </p>
             </section>
 
-            <!-- Tab: Material History (placeholder for now) -->
+            <!-- Tab: Material History -->
+            <!-- TODO: create a new display for Maintenance needed for the item selected -->
             <section id="tab-history" class="item-tab" style="display:none;">
                 <p class="muted">
                     This will show material/part usage and cost history linked to this item.
@@ -451,7 +452,7 @@ if (isset($_GET['item_id'])) {
             </section>
 
         <?php else: ?>
-            <!-- No add, no selected item: show empty state -->
+            <!-- Show empty state until an item is selected -->
             <div class="empty-state">
                 <h2>Select an item or add a new one</h2>
                 <p>Use the menu on the left to choose an item, or click <strong>Add Item</strong> to create one.</p>

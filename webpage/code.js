@@ -1,6 +1,6 @@
 const { debug } = require("puppeteer");
 
-// display error message on php page 
+// display error message
 function printError(elemId, msg) {
     document.getElementById(elemId).innerHTML = msg;
 }
@@ -104,12 +104,14 @@ function updateCountdown(dueTime, offset) {
 document.addEventListener("DOMContentLoaded", () => {
     const popup = document.querySelector(".popup.show");
     if (popup) {
+         // hide popup 2 seconds after posting
         setTimeout(() => {
             popup.classList.add("hide");
-        }, 2000); // 2 seconds before hiding
+        }, 2000);
 
+        // remove popup completely after hiding 
         setTimeout(() => {
             popup.remove();
-        }, 2600); // remove completely after animation
+        }, 2600); 
     }
 });
