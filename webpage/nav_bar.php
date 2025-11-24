@@ -6,5 +6,6 @@
             <li><a href="index.php">Home</a></li>
             <li><a href="submissions.php">Submissions</a></li>
             <li><a href="tickler.php">Countdown</a></li>
+            <li><a href="items.php">Items</a></li>
         </ul>
     </nav>

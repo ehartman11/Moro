@@ -6,7 +6,15 @@
     <title>Home Maintenance Scheduler</title>
     <!-- Include the validator code file and styling file -->
     <script src="code.js"> </script>
-    <link rel="stylesheet" href="main.css">
+
+    <link rel="stylesheet" href="styling/base.css">
+    <link rel="stylesheet" href="styling/nav.css">
+    <link rel="stylesheet" href="styling/hero.css">
+    <link rel="stylesheet" href="styling/home.css">
+    <link rel="stylesheet" href="styling/forms.css">
+    <link rel="stylesheet" href="styling/tables.css">
+    <link rel="stylesheet" href="styling/popup.css">
+
 </head>
 <body>
     <!-- Header to introduce the company -->
@@ -21,7 +29,7 @@
         </p>
     </header>
 
-    <!-- navigation bar -->
+    <!-- Navigation bar -->
     <?php include 'nav_bar.php'; ?>
 
     <!-- Checklist describing some of the features the app accomplishes -->
@@ -131,5 +139,4 @@
     </div>
 
 </body>
-
 </html>

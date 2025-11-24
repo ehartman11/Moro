@@ -26,7 +26,10 @@ $currentTime = time();
 <head>
     <meta charset="UTF-8">
     <title>Countdown</title>
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="styling/base.css">
+    <link rel="stylesheet" href="styling/nav.css">
+    <link rel="stylesheet" href="styling/countdown.css">
+    <link rel="stylesheet" href="styling/popup.css">
     <script src="code.js"></script>
 </head>
 
@@ -50,7 +53,8 @@ $currentTime = time();
 
 <?php if ($hasSubmitted): ?>
 <section style="margin-top:40px;">
-    <h2 style="text-align:center;">Countdown to Due Date: <?= $date . " " . $time?> </h2>
+    <h2 style="text-align:center;"> Countdown to Due Date: <?= $date . " " . $time?> </h2>
+    <h2 style="text-align:center;" id="diff"> </h2>
 
     <div class="countdown-container">
         <div class="countdown-box">

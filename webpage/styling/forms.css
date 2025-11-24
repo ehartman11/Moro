@@ -1,0 +1,75 @@
+.form-title {
+    text-align: center;
+    font-weight: 500;
+    margin-bottom: 30px;
+    font-size: 1.6rem;
+}
+
+form {
+    margin-top: 60px;
+    padding: 32px;
+    background: #fafafa;
+    border-radius: 10px;
+    border: 1px solid #e3e6eb;
+}
+
+.row {
+    margin-bottom: 22px;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="email"],
+input[type="number"],
+select,
+textarea {
+    padding: 12px 14px;
+    border-radius: 6px;
+    border: 1px solid #d0d4db;
+    font-size: 1rem;
+    transition: border-color 0.25s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #4A6FA5;
+    outline: none;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.error {
+    color: #c0392b;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+input[type="submit"],
+button[type="submit"],
+.add-item-btn {
+    padding: 14px;
+    border-radius: 6px;
+    border: none;
+    background: #4A6FA5;
+    color: white;
+    font-size: 1.05rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.25s;
+}
+
+input[type="submit"]:hover,
+button[type="submit"]:hover,
+.add-item-btn:hover {
+    background: #3b5884;
+}

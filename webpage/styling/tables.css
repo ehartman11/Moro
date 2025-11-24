@@ -1,0 +1,32 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #f8f9fb;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 24px;
+}
+
+th, td {
+    padding: 14px 18px;
+    text-align: left;
+}
+
+th {
+    background: #f0f2f5;
+    font-weight: 600;
+}
+
+tr:nth-child(even) {
+    background: #fafbfc;
+}
+
+/* Special style for comparison tables */
+.comparison table {
+    border: 1px solid #e2e5ea;
+    border-radius: 12px;
+}
+
+.comparison tr:hover {
+    background: #f1f4f8;
+}

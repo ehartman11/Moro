@@ -1,0 +1,64 @@
+/* ========== Base Styles ========== */
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    color: #222;
+    background-color: #ffffff;
+    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+    background-size: 300px;
+    background-blend-mode: soft-light;
+}
+
+/* Global layout container */
+body > * {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+    color: #111;
+    margin-top: 48px;
+    margin-bottom: 12px;
+}
+
+h1 {
+    margin-top: 32px;
+    font-size: 2.2rem;
+    text-align: center;
+}
+
+p, li {
+    font-size: 1.05rem;
+    color: #444;
+}
+
+p { margin-bottom: 18px; }
+
+/* Section rhythm */
+section {
+    padding: 60px 0;
+}
+
+section:nth-of-type(even) {
+    background: #f7f9fc;
+    border-top: 1px solid #e6e9ef;
+    border-bottom: 1px solid #e6e9ef;
+}
+
+/* Image defaults */
+img {
+    display: block;
+    margin: 40px auto;
+    max-width: 280px;
+}
+
+/* Mobile fixes */
+@media (max-width: 600px) {
+    body > * { padding: 0 12px; }
+    h1 { font-size: 1.8rem; }
+}

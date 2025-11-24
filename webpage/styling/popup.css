@@ -1,0 +1,26 @@
+.popup {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    background: #4A6FA5;
+    color: white;
+    padding: 14px 22px;
+    border-radius: 8px;
+    font-size: 1rem;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-12px);
+    transition: opacity .4s, transform .4s;
+    z-index: 9999;
+}
+
+.popup.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.popup.hide {
+    opacity: 0;
+    transform: translateY(-12px);
+}

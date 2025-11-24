@@ -1,0 +1,60 @@
+.countdown-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 22px;
+    justify-items: center;
+    margin-top: 40px;
+}
+
+.countdown-box {
+    background: #ffffff;
+    border: 1px solid #e3e6eb;
+    border-radius: 12px;
+    padding: 20px 10px;
+    width: 120px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform .2s;
+}
+
+.countdown-box:hover {
+    transform: translateY(-4px);
+}
+
+.cd-number {
+    font-size: 2.4rem;
+    font-weight: 600;
+    color: #4A6FA5;
+    margin-bottom: 6px;
+}
+
+.cd-label {
+    font-size: 0.95rem;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Urgency Colors */
+.countdown-box.green {
+    border-color: #5fa85f;
+    background: #f6fff6;
+}
+.countdown-box.yellow {
+    border-color: #d4a93b;
+    background: #fffae6;
+}
+.countdown-box.red {
+    border-color: #c0392b;
+    background: #fff1f1;
+}
+
+/* Flashing red */
+@keyframes flashRed {
+    0%, 100% { background: #fff1f1; }
+    50% { background: #ffe5e5; }
+}
+
+.countdown-box.flash {
+    animation: flashRed 0.7s infinite;
+}

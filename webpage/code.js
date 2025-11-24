@@ -1,3 +1,5 @@
+const { debug } = require("puppeteer");
+
 // display error message on php page 
 function printError(elemId, msg) {
     document.getElementById(elemId).innerHTML = msg;
@@ -60,6 +62,7 @@ function updateCountdown(dueTime, offset) {
     let seconds = Math.floor((diff / 1000) % 60);
 
     // Update numbers
+    document.getElementById("diff").textContent = diff;
     document.getElementById("cd-days").textContent = Math.max(days, 0);
     document.getElementById("cd-hours").textContent = hours.toString().padStart(2, '0');
     document.getElementById("cd-minutes").textContent = minutes.toString().padStart(2, '0');
@@ -88,7 +91,7 @@ function updateCountdown(dueTime, offset) {
         // Due today
         boxes.forEach(box => box.classList.add("red"));
     }
-    else if (diff < 7*24*60*60) { 
+    else if (diff < (7*24*60*60)) { 
         // Due within a week
         boxes.forEach(box => box.classList.add("yellow"));
     }
@@ -98,5 +101,15 @@ function updateCountdown(dueTime, offset) {
     }
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    const popup = document.querySelector(".popup.show");
+    if (popup) {
+        setTimeout(() => {
+            popup.classList.add("hide");
+        }, 2000); // 2 seconds before hiding
 
-
+        setTimeout(() => {
+            popup.remove();
+        }, 2600); // remove completely after animation
+    }
+});
