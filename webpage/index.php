@@ -110,32 +110,29 @@
     <!-- Logo -->
     <img src="./images/Moro_full_light.png">
     
-    <!-- Form for prospective users to fill out --> 
-    <form name="appForm" onsubmit="return validateForm();" action="submissions.php" method="post">
+    <!-- Quick Lead-In Registration -->
+    <form name="appForm" action="register.php" method="get">
         <h2 class="form-title">Interested? Give it a try.</h2>
+
         <div class="row">
-            <label>Full Name</label>
-            <input type="text" name="fullName">
-            <div class="error" id="fullNameErr"></div>
+            <label>First Name</label>
+            <input type="text" name="fname">
         </div>
+
         <div class="row">
-            <label>Birthdate</label>
-            <input type="date" name="birthdate">
-            <div class="error" id="birthdateErr"></div>
+            <label>Last Name</label>
+            <input type="text" name="lname">
         </div>
+
         <div class="row">
             <label>Email</label>
-            <input type="text" name="email">
-            <div class="error" id="emailErr"></div>
+            <input type="email" name="email">
         </div>
+
         <div class="row">
-            <input type="submit" value="Submit">
+            <input type="submit" value="Continue to Registration">
         </div>
     </form>
-
-    <div id="successPopup" class="popup">
-        <p>Submission Successful!</p>
-    </div>
 
 </body>
 </html>

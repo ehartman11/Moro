@@ -1,21 +1,13 @@
--- ===========================================================
---  Database: moro_db
---  Home Maintenance Scheduler Backend
---  Author: ChatGPT (Generated for Ethan Hartman)
--- ===========================================================
-
--- Drop old database if needed (optional)
+-- Drop old database 
 DROP DATABASE IF EXISTS moro_db;
 
--- Create fresh database
+-- Create database
 CREATE DATABASE moro_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE moro_db;
 
--- ===========================================================
 --  TABLE: items
 --  Represents an item that needs maintenance:
 --  home, vehicle, appliance, tool, etc.
--- ===========================================================
 
 CREATE TABLE items (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -26,11 +18,8 @@ CREATE TABLE items (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- ===========================================================
 --  TABLE: maintenance_tasks
 --  Recurring maintenance tasks for an item
---  Example: Change oil, Replace filter, Clean coils, etc.
--- ===========================================================
 
 CREATE TABLE maintenance_tasks (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -52,11 +41,8 @@ CREATE TABLE maintenance_tasks (
 
 CREATE INDEX idx_task_item ON maintenance_tasks (item_id);
 
--- ===========================================================
 --  TABLE: task_schedule
 --  Represents each *upcoming* due date for a task.
---  Used by the countdown screen.
--- ===========================================================
 
 CREATE TABLE task_schedule (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -72,11 +58,8 @@ CREATE TABLE task_schedule (
 CREATE INDEX idx_schedule_task ON task_schedule (task_id);
 CREATE INDEX idx_schedule_due ON task_schedule (due_date);
 
--- ===========================================================
 --  TABLE: task_history
 --  Represents a *completed* maintenance event.
---  Stores notes, cost, timestamp, and links to schedule instance.
--- ===========================================================
 
 CREATE TABLE task_history (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -99,10 +82,8 @@ CREATE TABLE task_history (
 
 CREATE INDEX idx_history_task ON task_history (task_id);
 
--- ===========================================================
 --  TABLE: photos
 --  Stores one or more photos per completed task.
--- ===========================================================
 
 CREATE TABLE photos (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -117,10 +98,7 @@ CREATE TABLE photos (
 
 CREATE INDEX idx_photos_history ON photos (history_id);
 
--- ===========================================================
--- Insert recommended default categories (if needed)
--- Item categories (user-defined but suggested defaults)
--- ===========================================================
+-- Insert default info representing each category
 
 INSERT INTO items (name, category, purchase_date, notes)
 VALUES 
@@ -129,9 +107,3 @@ VALUES
     ('Appliance (General)', 'Appliance', NULL, 'General appliance upkeep'),
     ('Tools (General)', 'Tools', NULL, 'Tool care and maintenance'),
     ('Outdoor Equipment', 'Outdoor', NULL, 'Lawn, garden, and outdoor devices');
-
--- OPTIONAL: You can comment out the above if you don't want default entries.
-
--- ===========================================================
--- END OF FILE
--- ===========================================================

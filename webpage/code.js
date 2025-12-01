@@ -115,3 +115,26 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 2600); 
     }
 });
+
+// ensure all data is present
+function validateLogin() {
+    const email = document.forms["loginForm"]["email"].value.trim();
+    const password = document.forms["loginForm"]["password"].value.trim();
+
+    let valid = true;
+
+    document.getElementById("emailErr").innerText = "";
+    document.getElementById("passwordErr").innerText = "";
+
+    if (email === "") {
+        document.getElementById("emailErr").innerText = "Email is required.";
+        valid = false;
+    }
+
+    if (password === "") {
+        document.getElementById("passwordErr").innerText = "Password is required.";
+        valid = false;
+    }
+
+    return valid;
+}
