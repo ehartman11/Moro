@@ -2,7 +2,7 @@
     $host = "localhost";
     $dbname = "moro_db";
     $username = "root";
-    $password = "";
+    $password = "!23DataEng32!";
 
     try {
         $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
@@ -12,5 +12,4 @@
     } catch (PDOException $e) {
         die("Database connection failed: " . $e->getMessage());
     }
-
 ?>

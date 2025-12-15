@@ -1,91 +1,316 @@
-<?php 
-// If the user has submitted a date/time, process it
-$hasSubmitted = false;
-$dueTime = null;
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $date = $_POST['dueDate'] ?? null;
-    $time = $_POST['dueTime'] ?? null;
-
-    if (!$time) {
-        $time = "00:00:00";
-    }
-
-    if ($date) {
-        $combined = "$date $time";
-        $dueTime = strtotime($combined);
-        $hasSubmitted = true;
-    }
+<?php
+session_start();
+if (!isset($_SESSION["user_id"])) {
+    header("Location: login.php");
+    exit;
 }
 
-$currentTime = time();
-?>
+if (!isset($_SESSION["active_home_id"])) {
+    header("Location: homes.php");
+    exit;
+}
 
+$activeHomeId = (int)$_SESSION["active_home_id"];
+$serverNow = time();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Countdown</title>
+    <title>Maintenance Calendar</title>
+
     <link rel="stylesheet" href="styling/base.css">
     <link rel="stylesheet" href="styling/nav.css">
-    <link rel="stylesheet" href="styling/countdown.css">
     <link rel="stylesheet" href="styling/popup.css">
+    <link rel="stylesheet" href="styling/tickler.css">
+
+    <!-- jQuery (CDN) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="code.js"></script>
-</head>
-
-<body>
-
-<?php include 'nav_bar.php'; ?>
-
-<section>
-    <h2 style="text-align:center; margin-bottom:30px;">Select a Due Date</h2>
-
-    <form method="post" action="tickler.php" class="dateForm" style="max-width:400px; margin:auto;">
-        <label>Choose Date</label>
-        <input type="date" name="dueDate" required>
-
-        <label>Choose Time</label>
-        <input type="time" name="dueTime">
-
-        <input type="submit" value="Start Countdown">
-    </form>
-</section>
-
-<?php if ($hasSubmitted): ?>
-<section style="margin-top:40px;">
-    <h2 style="text-align:center;"> Countdown to Due Date: <?= $date . " " . $time?> </h2>
-    <h2 style="text-align:center;" id="diff"> </h2>
-
-    <div class="countdown-container">
-        <div class="countdown-box">
-            <span id="cd-days" class="cd-number">--</span>
-            <span class="cd-label">Days</span>
-        </div>
-        <div class="countdown-box">
-            <span id="cd-hours" class="cd-number">--</span>
-            <span class="cd-label">Hours</span>
-        </div>
-        <div class="countdown-box">
-            <span id="cd-minutes" class="cd-number">--</span>
-            <span class="cd-label">Minutes</span>
-        </div>
-        <div class="countdown-box">
-            <span id="cd-seconds" class="cd-number">--</span>
-            <span class="cd-label">Seconds</span>
-        </div>
-    </div>
 
     <script>
-        // Convert php to JS
-        let dueTime = <?= $dueTime ?> * 1000;
-        let serverNow = <?= $currentTime ?> * 1000;
-        let offset = serverNow - Date.now();
+        // Server clock sync
+        const SERVER_NOW_MS = <?= (int)$serverNow ?> * 1000;
+        const CLIENT_NOW_MS = Date.now();
+        const CLOCK_OFFSET_MS = SERVER_NOW_MS - CLIENT_NOW_MS;
 
-        updateCountdown(dueTime, offset);
-        setInterval(() => updateCountdown(dueTime, offset), 1000);
+        // Active home (sent to API via session, but useful for debugging)
+        const ACTIVE_HOME_ID = <?= (int)$activeHomeId ?>;
     </script>
+
+    <script src="code.js"></script>
+</head>
+<body>
+
+<?php include "nav_bar.php"; ?>
+
+<section class="tickler-layout">
+    <!-- Left column: tasks list -->
+    <aside class="tickler-left">
+        <h2 class="tickler-title">Tasks on <span id="selected-date-label">—</span></h2>
+        <div id="day-tasks" class="day-tasks">
+            <p class="muted">Select a day on the calendar.</p>
+        </div>
+    </aside>
+
+    <!-- Right column: countdown + selected task -->
+    <main class="tickler-right">
+        <div class="countdown-card">
+            <h2 class="countdown-title">Countdown</h2>
+
+            <div id="countdown-container" class="countdown-container">
+                <div class="countdown-box">
+                    <span id="cd-days" class="cd-number">--</span>
+                    <span class="cd-label">Days</span>
+                </div>
+                <div class="countdown-box">
+                    <span id="cd-hours" class="cd-number">--</span>
+                    <span class="cd-label">Hours</span>
+                </div>
+                <div class="countdown-box">
+                    <span id="cd-minutes" class="cd-number">--</span>
+                    <span class="cd-label">Minutes</span>
+                </div>
+                <div class="countdown-box">
+                    <span id="cd-seconds" class="cd-number">--</span>
+                    <span class="cd-label">Seconds</span>
+                </div>
+            </div>
+
+            <div class="selected-task">
+                <h3 id="task-title">Select a task</h3>
+                <p id="task-desc" class="muted">
+                    Choose a day, then pick a task to see details here.
+                </p>
+            </div>
+        </div>
+
+        <!-- Calendar -->
+        <div class="calendar-card">
+            <div class="calendar-header">
+                <button class="cal-nav" id="cal-prev" title="Previous month">‹</button>
+                <h2 id="cal-month-label">—</h2>
+                <button class="cal-nav" id="cal-next" title="Next month">›</button>
+            </div>
+
+            <table class="calendar">
+                <thead>
+                    <tr>
+                        <th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th>
+                    </tr>
+                </thead>
+                <tbody id="cal-body"></tbody>
+            </table>
+        </div>
+    </main>
 </section>
-<?php endif; ?>
+
+<script>
+$(function () {
+    // Initialize calendar to current month
+    const now = new Date(Date.now() + CLOCK_OFFSET_MS);
+    let viewYear = now.getFullYear();
+    let viewMonth = now.getMonth(); // 0-11
+
+    function pad2(n) { return String(n).padStart(2, "0"); }
+    function ymd(y, m0, d) { return `${y}-${pad2(m0+1)}-${pad2(d)}`; }
+
+    // Cache: { "YYYY-MM-DD": [taskObj, ...] } for the visible month
+    let monthTasksByDate = {};
+
+    function renderCalendar(year, month0) {
+        const monthNames = [
+            "January","February","March","April","May","June",
+            "July","August","September","October","November","December"
+        ];
+        $("#cal-month-label").text(`${monthNames[month0]} ${year}`);
+
+        const first = new Date(year, month0, 1);
+        const startDow = first.getDay(); // 0=Sun
+        const daysInMonth = new Date(year, month0+1, 0).getDate();
+
+        // Build 6 weeks grid (enough for any month)
+        let html = "";
+        let day = 1 - startDow;
+
+        for (let wk = 0; wk < 6; wk++) {
+            html += "<tr>";
+            for (let col = 0; col < 7; col++, day++) {
+                if (day < 1 || day > daysInMonth) {
+                    html += `<td class="cal-empty"></td>`;
+                } else {
+                    const dateStr = ymd(year, month0, day);
+                    const hasTasks = !!monthTasksByDate[dateStr]?.length;
+                    const badgeCount = hasTasks ? monthTasksByDate[dateStr].length : 0;
+
+                    html += `
+                      <td class="cal-day" data-date="${dateStr}">
+                        <div class="cal-day-inner">
+                          <div class="cal-num">${day}</div>
+                          ${hasTasks ? `<div class="cal-badge">${badgeCount}</div>` : ``}
+                        </div>
+                      </td>
+                    `;
+                }
+            }
+            html += "</tr>";
+        }
+
+        $("#cal-body").html(html);
+    }
+
+    function fetchMonthTasks(year, month0) {
+        const month1 = month0 + 1;
+        return $.getJSON("tickler_api.php", { action: "month", year: year, month: month1 })
+            .done(function (data) {
+                monthTasksByDate = data.byDate || {};
+                renderCalendar(year, month0);
+
+                // Auto-select today (if visible) or first of month
+                const todayStr = ymd(now.getFullYear(), now.getMonth(), now.getDate());
+                const defaultDate = (year === now.getFullYear() && month0 === now.getMonth())
+                    ? todayStr
+                    : ymd(year, month0, 1);
+
+                selectDay(defaultDate);
+            })
+            .fail(function (xhr) {
+                console.error(xhr.responseText);
+                $("#day-tasks").html(`<p class="muted">Failed to load tasks for this month.</p>`);
+            });
+    }
+
+    function setCountdownTarget(dateStr) {
+        // Countdown to start of that day (local time)
+        const targetMs = new Date(dateStr + "T00:00:00").getTime();
+        window.__ticklerTargetMs = targetMs;
+    }
+
+    function applyUrgency(diffMs) {
+        const $c = $("#countdown-container");
+        $c.removeClass("green yellow red pulse");
+
+        if (diffMs < 0) { $c.addClass("pulse"); return; }
+
+        const oneDay = 24 * 60 * 60 * 1000;
+        const sevenDays = 7 * oneDay;
+
+        if (diffMs > sevenDays) $c.addClass("green");
+        else if (diffMs > oneDay) $c.addClass("yellow");
+        else $c.addClass("red");
+    }
+
+    function updateCountdownTick() {
+        if (!window.__ticklerTargetMs) return;
+
+        const nowMs = Date.now() + CLOCK_OFFSET_MS;
+        let diff = window.__ticklerTargetMs - nowMs;
+
+        const sign = diff < 0 ? -1 : 1;
+        diff = Math.abs(diff);
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        $("#cd-days").text(days);
+        $("#cd-hours").text(String(hours).padStart(2, "0"));
+        $("#cd-minutes").text(String(minutes).padStart(2, "0"));
+        $("#cd-seconds").text(String(seconds).padStart(2, "0"));
+
+        const signedDiff = (window.__ticklerTargetMs - (Date.now() + CLOCK_OFFSET_MS));
+        applyUrgency(signedDiff);
+    }
+
+    function renderDayTasks(dateStr, tasks) {
+        $("#selected-date-label").text(dateStr);
+
+        if (!tasks || tasks.length === 0) {
+            $("#day-tasks").html(`<p class="muted">No tasks scheduled for this day.</p>`);
+            $("#task-title").text("Select a task");
+            $("#task-desc").text("Choose a day with tasks to see details.");
+            return;
+        }
+
+        let html = `<ul class="task-list">`;
+        for (const t of tasks) {
+            html += `
+              <li class="task-item" data-task='${JSON.stringify(t).replace(/'/g, "&apos;")}'>
+                <div class="task-name">${escapeHtml(t.task_name)}</div>
+                <div class="task-meta muted">${escapeHtml(t.item_name || "")}</div>
+              </li>
+            `;
+        }
+        html += `</ul>`;
+        $("#day-tasks").html(html);
+
+        // auto-select first task
+        $(".task-item").first().trigger("click");
+    }
+
+    function selectDay(dateStr) {
+        $(".cal-day").removeClass("selected");
+        $(`.cal-day[data-date="${dateStr}"]`).addClass("selected");
+
+        setCountdownTarget(dateStr);
+
+        // Pull tasks for that day
+        $.getJSON("tickler_api.php", { action: "day", date: dateStr })
+            .done(function (data) {
+                renderDayTasks(dateStr, data.tasks || []);
+            })
+            .fail(function (xhr) {
+                console.error(xhr.responseText);
+                $("#day-tasks").html(`<p class="muted">Failed to load tasks for this day.</p>`);
+            });
+
+        updateCountdownTick();
+    }
+
+    // Click day
+    $(document).on("click", ".cal-day", function () {
+        const dateStr = $(this).data("date");
+        if (!dateStr) return;
+        selectDay(dateStr);
+    });
+
+    // Click task
+    $(document).on("click", ".task-item", function () {
+        $(".task-item").removeClass("active");
+        $(this).addClass("active");
+
+        // Stored as JSON string in data-task
+        const raw = $(this).attr("data-task");
+        let t = null;
+        try { t = JSON.parse(raw.replace(/&apos;/g, "'")); } catch (e) { }
+
+        if (t) {
+            $("#task-title").text(t.task_name || "Task");
+            $("#task-desc").text(t.description || "");
+        }
+    });
+
+    // Month navigation
+    $("#cal-prev").on("click", function () {
+        viewMonth--;
+        if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+        fetchMonthTasks(viewYear, viewMonth);
+    });
+
+    $("#cal-next").on("click", function () {
+        viewMonth++;
+        if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+        fetchMonthTasks(viewYear, viewMonth);
+    });
+
+    // Start ticker
+    setInterval(updateCountdownTick, 1000);
+
+    // Load initial month
+    fetchMonthTasks(viewYear, viewMonth);
+});
+</script>
 
 </body>
 </html>
