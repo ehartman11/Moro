@@ -1,3 +1,10 @@
+<!--
+  Landing / marketing page (index).
+  Responsibilities:
+  - Presents the Moro value proposition + feature highlights.
+  - Includes the shared nav bar.
+  - Provides a lightweight “lead-in” form that forwards optional prefill fields to register.php via GET.
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +23,6 @@
 
 </head>
 <body>
-    <!-- Header to introduce the company -->
     <header class="header">
         <img src="./images/Moro_logo_light.png" class="header-logo">
         <h1>Know what needs attention - and when</h1>
@@ -28,10 +34,8 @@
         </p>
     </header>
 
-    <!-- Navigation bar -->
     <?php include 'nav_bar.php'; ?>
 
-    <!-- Checklist describing some of the features the app accomplishes -->
     <section class="benefit-list">
         <ul>
             <li><span class="check">✓</span> Create and organize maintenance tasks</li>
@@ -42,7 +46,6 @@
         </ul>
     </section>
 
-    <!-- Reasons that emphasize why the purpose of app is beneficial -->
     <section class="feature-grid">
         <div class="feature-card">
             <h3>Prevent Costly Repairs</h3>
@@ -59,8 +62,7 @@
             <p>No more guessing or remembering. Moro stays on top of it for you.</p>
         </div>
     </section>
-    
-    <!-- Categories that are covered by the app -->
+
     <section class="category-list">
         <h2>One place for everything you care for.</h2>
         <p>Track maintenance schedules, service history, notes, and reminders for:</p>
@@ -76,8 +78,7 @@
 
         <p>If it requires upkeep, Moro keeps it organized.</p>
     </section>
-    
-    <!-- A table of features covered by the app -->
+
     <section class="comparison">
         <table>
             <thead>
@@ -106,11 +107,10 @@
             </tbody>
         </table>
     </section>
-    
-    <!-- Logo -->
+
     <img src="./images/Moro_full_light.png">
-    
-    <!-- Quick Lead-In Registration -->
+
+    <!-- Lead capture forwards optional values to prefill the registration form (register.php?fname=...&lname=...&email=...). -->
     <form name="appForm" action="register.php" method="get">
         <h2 class="form-title">Interested? Give it a try.</h2>
 

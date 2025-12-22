@@ -1,4 +1,13 @@
 <?php
+/**
+ * Tickler calendar UI page.
+ *
+ * Responsibilities:
+ * - Enforces authenticated session + an "active home" context before rendering.
+ * - Renders the calendar + day task list + countdown UI shell.
+ * - Bootstraps the client with a server-synced clock offset (used for consistent countdown timing).
+ * - Uses tickler_api.php for month/day task retrieval; UI is rendered client-side via jQuery.
+ */
 session_start();
 if (!isset($_SESSION["user_id"])) {
     header("Location: login.php");
@@ -29,7 +38,8 @@ $serverNow = time();
     <script src="code.js"></script>
 
     <script>
-        // Server clock sync
+        // Compute a server->client clock offset once, then use it everywhere we need "now".
+        // This keeps countdowns stable even if the user's local clock is off.
         const SERVER_NOW_MS = <?= (int)$serverNow ?> * 1000;
         const CLIENT_NOW_MS = Date.now();
         const CLOCK_OFFSET_MS = SERVER_NOW_MS - CLIENT_NOW_MS;
@@ -38,7 +48,6 @@ $serverNow = time();
         const ACTIVE_HOME_ID = <?= (int)$activeHomeId ?>;
     </script>
 
-    <script src="code.js"></script>
 </head>
 <body>
 
@@ -107,7 +116,7 @@ $serverNow = time();
 
 <script>
 $(function () {
-    // Initialize calendar to current month
+    // Initialize calendar from server-synced "now" (not the user's local clock).
     const now = new Date(Date.now() + CLOCK_OFFSET_MS);
     let viewYear = now.getFullYear();
     let viewMonth = now.getMonth(); // 0-11
@@ -115,7 +124,6 @@ $(function () {
     function pad2(n) { return String(n).padStart(2, "0"); }
     function ymd(y, m0, d) { return `${y}-${pad2(m0+1)}-${pad2(d)}`; }
 
-    // Cache: { "YYYY-MM-DD": [taskObj, ...] } for the visible month
     let monthTasksByDate = {};
 
     function renderCalendar(year, month0) {
@@ -129,7 +137,7 @@ $(function () {
         const startDow = first.getDay(); // 0=Sun
         const daysInMonth = new Date(year, month0+1, 0).getDate();
 
-        // Build 6 weeks grid (enough for any month)
+        // Build a fixed 6-week grid so the table doesn't jump in height month-to-month.
         let html = "";
         let day = 1 - startDow;
 
@@ -166,7 +174,7 @@ $(function () {
                 monthTasksByDate = data.byDate || {};
                 renderCalendar(year, month0);
 
-                // Auto-select today (if visible) or first of month
+                // UX: default selection is "today" when viewing the current month, otherwise the 1st.
                 const todayStr = ymd(now.getFullYear(), now.getMonth(), now.getDate());
                 const defaultDate = (year === now.getFullYear() && month0 === now.getMonth())
                     ? todayStr
@@ -181,9 +189,8 @@ $(function () {
     }
 
     function setCountdownTarget(dateStr) {
-        // Countdown to start of that day (local time)
-        const targetMs = new Date(dateStr + "T00:00:00").getTime();
-        window.__ticklerTargetMs = targetMs;
+        // Countdown targets midnight at the start of the selected day.
+        window.__ticklerTargetMs = new Date(dateStr + "T00:00:00").getTime();
     }
 
     function applyUrgency(diffMs) {
@@ -219,6 +226,7 @@ $(function () {
         $("#cd-minutes").text(String(minutes).padStart(2, "0"));
         $("#cd-seconds").text(String(seconds).padStart(2, "0"));
 
+        // Use the signed delta (pre-abs) to drive urgency styling.
         const signedDiff = (window.__ticklerTargetMs - (Date.now() + CLOCK_OFFSET_MS));
         applyUrgency(signedDiff);
     }
@@ -235,6 +243,8 @@ $(function () {
 
         let html = `<ul class="task-list">`;
         for (const t of tasks) {
+            // Store the full task payload on the element so the click handler can render details
+            // without another API call.
             html += `
               <li class="task-item" data-task='${JSON.stringify(t).replace(/'/g, "&apos;")}'>
                 <div class="task-name">${escapeHtml(t.task_name)}</div>
@@ -255,7 +265,6 @@ $(function () {
 
         setCountdownTarget(dateStr);
 
-        // Pull tasks for that day
         $.getJSON("tickler_api.php", { action: "day", date: dateStr })
             .done(function (data) {
                 renderDayTasks(dateStr, data.tasks || []);
@@ -268,19 +277,19 @@ $(function () {
         updateCountdownTick();
     }
 
-    // Click day
     $(document).on("click", ".cal-day", function () {
         const dateStr = $(this).data("date");
         if (!dateStr) return;
         selectDay(dateStr);
     });
 
-    // Click task
     $(document).on("click", ".task-item", function () {
         $(".task-item").removeClass("active");
         $(this).addClass("active");
 
-        // Stored as JSON string in data-task
+        // Stored as JSON string in data-task.
+        // NOTE: attribute escaping is handled minimally here; if task payloads ever include quotes/newlines,
+        // consider switching to jQuery's .data() with an object (or base64-encoding) to avoid edge cases.
         const raw = $(this).attr("data-task");
         let t = null;
         try { t = JSON.parse(raw.replace(/&apos;/g, "'")); } catch (e) { }
@@ -291,7 +300,6 @@ $(function () {
         }
     });
 
-    // Month navigation
     $("#cal-prev").on("click", function () {
         viewMonth--;
         if (viewMonth < 0) { viewMonth = 11; viewYear--; }
@@ -304,10 +312,7 @@ $(function () {
         fetchMonthTasks(viewYear, viewMonth);
     });
 
-    // Start ticker
     setInterval(updateCountdownTick, 1000);
-
-    // Load initial month
     fetchMonthTasks(viewYear, viewMonth);
 });
 </script>

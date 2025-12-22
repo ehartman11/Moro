@@ -1,4 +1,13 @@
 <?php
+/**
+ * Login page.
+ *
+ * Responsibilities:
+ * - Renders the sign-in form.
+ * - Authenticates a user via email + password.
+ * - On success, initializes the session identity and redirects to the main app.
+ * - On failure, returns a generic authentication error.
+ */
 require_once "db_conn.php";
 session_start();
 
@@ -21,13 +30,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user["password"])) {
-            $_SESSION["user_id"] = $user["id"];
+            // Establish authenticated session identity.
+            $_SESSION["user_id"]   = $user["id"];
             $_SESSION["user_name"] = $user["fname"];
             $_SESSION["user_role"] = $user["role"];
 
             header("Location: items.php");
             exit;
         } else {
+            // Deliberately generic to avoid leaking which field was incorrect.
             $error = "Invalid email or password.";
         }
     }

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Account registration page.
+ *
+ * Responsibilities:
+ * - Displays a create-account form (optionally prefilled via query params).
+ * - On POST, validates required fields, hashes the password, and inserts a new user row.
+ * - Shows a success prompt linking to login, or a user-friendly error message.
+ */
 require_once "db_conn.php";
 
 $prefill_fname = $_GET["fname"] ?? "";
@@ -8,6 +16,7 @@ $prefill_email = $_GET["email"] ?? "";
 $error = "";
 $success = false;
 
+// NOTE: duplicate initialization can be removed; leaving it doesn't change behavior.
 $error = "";
 $success = false;
 
@@ -18,11 +27,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = trim($_POST["email"] ?? "");
     $phone = trim($_POST["phone"] ?? "");
     $password = $_POST["password"] ?? "";
-    $role = "user"; 
+    $role = "user";
 
     if ($fname === "" || $lname === "" || $email === "" || $password === "") {
         $error = "All required fields must be filled.";
     } else {
+        // Uses PHP's recommended password hashing (algorithm + cost managed by PASSWORD_DEFAULT).
         $hash = password_hash($password, PASSWORD_DEFAULT);
 
         try {
@@ -43,6 +53,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $success = true;
 
         } catch (PDOException $e) {
+            // Assumes the only expected insert failure here is a unique email constraint.
+            // If you later add more constraints, consider branching based on SQLSTATE/driver error codes.
             $error = "That email is already registered.";
         }
     }

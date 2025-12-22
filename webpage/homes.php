@@ -1,4 +1,13 @@
 <?php
+/**
+ * Homes management + active-home selection page.
+ *
+ * Responsibilities:
+ * - Requires authentication.
+ * - Allows a user to create a new "home" and automatically grants them owner permission.
+ * - Lists all homes the user has access to (via home_permissions).
+ * - Lets the user set an active home context (stored in session) for the rest of the app.
+ */
 require_once "db_conn.php";
 session_start();
 
@@ -42,6 +51,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["create_home"])) {
         ]);
 
         $homeId = $pdo->lastInsertId();
+
+        // New-home bootstrap: permissions are normalized into home_permissions, so the creator
+        // gets an explicit 'owner' role row (used by access checks elsewhere).
         $stmtPerm = $pdo->prepare("
             INSERT INTO home_permissions (home_id, user_id, role)
             VALUES (:hid, :uid, 'owner')
@@ -50,6 +62,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["create_home"])) {
             ':hid' => $homeId,
             ':uid' => $userId
         ]);
+
+        // Active-home is the core context for the rest of the app (items, tasks, schedules, etc.).
         $_SESSION["active_home_id"] = $homeId;
         $success = true;
     }
@@ -71,6 +85,7 @@ if (isset($_GET["select_home"])) {
 
     $homeId = (int) $_GET["select_home"];
 
+    // Permission gate: only allow setting active_home_id if a permissions row exists.
     $stmt = $pdo->prepare("
         SELECT 1
         FROM home_permissions

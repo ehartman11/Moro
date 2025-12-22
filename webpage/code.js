@@ -1,3 +1,19 @@
+/**
+ * Shared front-end helpers (forms, popups, countdown styling).
+ *
+ * Responsibilities:
+ * - Basic client-side validation for specific forms (register-ish form + login form).
+ * - Generic popup auto-dismiss behavior.
+ * - Countdown calculations + urgency styling for tickler UI elements.
+ * - HTML escaping helper for safely rendering dynamic strings into the DOM.
+ *
+ * NOTE:
+ * - This file is included across multiple pages, so functions here should stay generic
+ *   or be guarded to avoid coupling to pages that don't contain expected elements.
+ */
+
+// NOTE: This line doesn't belong in browser JS. `require("puppeteer")` is Node-only.
+// If this file is loaded via <script src="code.js"> in the browser, remove it.
 const { debug } = require("puppeteer");
 
 // display error message
@@ -102,6 +118,7 @@ function updateCountdown(dueTime, offset) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    // Auto-dismiss server-rendered popup messages after a short delay.
     const popup = document.querySelector(".popup.show");
     if (popup) {
          // hide popup 2 seconds after posting
@@ -139,6 +156,10 @@ function validateLogin() {
     return valid;
 }
 
+/**
+ * Escapes a string for safe insertion into HTML (prevents tag/attribute injection).
+ * Used when rendering API-provided text into the DOM.
+ */
 function escapeHtml(str) {
   return String(str ?? "")
     .replace(/&/g, "&amp;")

@@ -1,38 +1,132 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+/**
+ * Account registration page.
+ *
+ * - Renders a create-account form (optionally prefilled via query params).
+ * - On POST, validates required fields, hashes the password, and inserts a new user.
+ * - Displays success or a user-friendly error message.
+ */
+require_once "db_conn.php";
+
+$prefill_fname = $_GET["fname"] ?? "";
+$prefill_lname = $_GET["lname"] ?? "";
+$prefill_email = $_GET["email"] ?? "";
+
+$error = "";
+$success = false;
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+    $fname = trim($_POST["fname"] ?? "");
+    $lname = trim($_POST["lname"] ?? "");
+    $email = trim($_POST["email"] ?? "");
+    $phone = trim($_POST["phone"] ?? "");
+    $password = $_POST["password"] ?? "";
+    $role = "user";
+
+    if ($fname === "" || $lname === "" || $email === "" || $password === "") {
+        $error = "All required fields must be filled.";
+    } else {
+        // Uses PHP's recommended password hashing (algorithm + cost managed by PASSWORD_DEFAULT).
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+
+        try {
+            $stmt = $pdo->prepare("
+                INSERT INTO users (fname, lname, email, phone, role, password)
+                VALUES (:fname, :lname, :email, :phone, :role, :password)
+            ");
+
+            $stmt->execute([
+                ":fname" => $fname,
+                ":lname" => $lname,
+                ":email" => $email,
+                // Store empty phone as NULL to avoid meaninglessly distinct values ("", NULL).
+                ":phone" => $phone ?: null,
+                ":role"  => $role,
+                ":password" => $hash
+            ]);
+
+            $success = true;
+
+        } catch (PDOException $e) {
+            // Assumes the expected failure here is a unique email constraint.
+            $error = "That email is already registered.";
+        }
+    }
 }
 ?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Create Account</title>
+    <link rel="stylesheet" href="styling/base.css">
+    <link rel="stylesheet" href="styling/forms.css">
+    <link rel="stylesheet" href="styling/popup.css">
+    <link rel="stylesheet" href="styling/nav.css">
+</head>
+<body>
 
-<!-- Navigation bar -->
-<nav class="nav">
-    <a href="index.php" class="nav-logo">Moro</a>
+    <nav class="nav">
+        <a href="index.php" class="nav-logo">Moro</a>
+        <ul>
+            <li><a href="index.php">Home</a></li>
+            <li><a href="login.php">Login</a></li>
+        </ul>
+    </nav>
 
-    <!-- User dropdown when logged in -->
-    <?php if (isset($_SESSION["user_id"])): ?>
-        <div class="nav-user">
-            <span class="nav-username">
-                <?= htmlspecialchars($_SESSION["user_name"] ?? "User") ?>
-            </span>
+<form method="POST">
+    <h2 class="form-title">Create Account</h2>
 
-            <div class="nav-dropdown">
-                <a href="profile.php">Profile</a>
-                <a href="homes.php">Switch Home</a>
-                <a href="logout.php">Logout</a>
-            </div>
+    <?php if ($success): ?>
+        <div class="popup show" style="background:#4CAF50;">
+            Account created successfully.
+            <br><br>
+            <a href="login.php" style="color:white;text-decoration:underline;">
+                Sign In
+            </a>
         </div>
     <?php endif; ?>
 
-    <!-- Main links -->
-    <ul>
-        <li><a href="index.php">Home</a></li>
-        <li><a href="tickler.php">Countdown</a></li>
+    <?php if ($error): ?>
+        <div class="popup show" style="background:#e74c3c;">
+            <?= htmlspecialchars($error) ?>
+        </div>
+    <?php endif; ?>
 
-        <?php if (isset($_SESSION["user_id"])): ?>
-            <li><a href="homes.php">Homes</a></li>
-            <li><a href="items.php">Items</a></li>
-        <?php else: ?>
-            <li><a href="login.php">Login</a></li>
-        <?php endif; ?>
-    </ul>
-</nav>
+    <div class="row">
+        <label>First Name *</label>
+        <input type="text" name="fname" required value="<?= htmlspecialchars($prefill_fname) ?>">
+    </div>
+
+    <div class="row">
+        <label>Last Name *</label>
+        <input type="text" name="lname" required value="<?= htmlspecialchars($prefill_lname) ?>">
+    </div>
+
+    <div class="row">
+        <label>Email *</label>
+        <input type="email" name="email" required value="<?= htmlspecialchars($prefill_email) ?>">
+    </div>
+
+    <div class="row">
+        <label>Phone</label>
+        <input type="text" name="phone">
+    </div>
+
+    <div class="row">
+        <label>Password *</label>
+        <input type="password" name="password" required>
+    </div>
+
+    <div class="row">
+        <input type="submit" value="Create Account">
+    </div>
+
+    <p style="text-align:center;">
+        Already have an account? <a href="login.php">Sign in</a>
+    </p>
+</form>
+
+</body>
+</html>
