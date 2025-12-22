@@ -67,39 +67,6 @@ Authorization Enforcement
 •	Owner-only actions call require_owner() before execution.
 •	UI visibility mirrors backend permissions (never relied on alone).
 
-Application Structure
-/webpage
-├── index.php              # Landing page
-├── login.php              # Authentication
-├── register.php           # Account creation
-├── logout.php
-├── homes.php              # Home selection & creation
-├── tickler.php            # Countdown calendar
-│
-├── items/
-│   ├── index.php          # Item tree + tab layout
-│   ├── tabs/
-│   │   ├── details.php
-│   │   ├── maintenance.php
-│   │   └── history.php
-│   ├── actions/
-│   │   ├── add_item.php
-│   │   ├── update_item.php
-│   │   ├── delete_item.php
-│   │   ├── add_task.php
-│   │   ├── complete_task.php
-│   │   └── add_history.php
-│   ├── _auth.php
-│   └── _item_header.php
-│
-├── styling/               # CSS modules
-├── images/
-├── code.js                # Shared JS utilities
-├── nav_bar.php
-├── db_conn.php
-├── config.php
-└── _bootstrap.php
-
 Design Principles
 Deterministic Data Model
 •	One schedule row per task.
