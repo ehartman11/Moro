@@ -14,7 +14,7 @@
 $host = "localhost";
 $dbname = "moro_db";
 $username = "root";
-$password = "!23DataEng32!";
+$password = "";
 
 try {
     $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
@@ -30,3 +30,4 @@ try {
     // Fail fast: without a DB connection, the app cannot function.
     die("Database connection failed: " . $e->getMessage());
 }
+
