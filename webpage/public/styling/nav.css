@@ -1,0 +1,198 @@
+.nav {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 14px 20px 12px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    margin-top: 14px;
+}
+
+.nav-global {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.nav-global-links {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.nav-logo {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #111;
+    text-decoration: none;
+}
+
+.nav ul {
+    display: flex;
+    list-style: none;
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-portal-links {
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+}
+
+.nav-portal-switch {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.nav-portal-label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.nav-portal-switch select {
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: 5px 8px;
+    background: #fff;
+    color: #333;
+}
+
+.nav a {
+    text-decoration: none;
+    color: #444;
+    font-size: 1rem;
+    transition: color 0.2s, background 0.2s;
+    border-radius: 6px;
+    padding: 4px 7px;
+}
+
+.nav a:hover {
+    color: var(--primary);
+    background: #f5f7fb;
+}
+
+.nav-user {
+    position: relative;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.nav-username {
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    transition: background 0.2s;
+}
+
+.nav-username:hover {
+    background: #f1f3f7;
+}
+
+.nav-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 110%;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    min-width: 160px;
+    z-index: 1000;
+    box-shadow: var(--shadow-md);
+}
+
+.nav-user:hover .nav-dropdown {
+    display: block;
+}
+
+.nav-user:focus-within .nav-dropdown {
+    display: block;
+}
+
+.nav-dropdown a {
+    display: block;
+    padding: 10px 14px;
+    text-decoration: none;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.nav-dropdown a:hover {
+    background: #f5f7fb;
+}
+
+.nav-message {
+    font-size: 0.9rem;
+    color: #8a3b12;
+    background: #fff4ec;
+    border: 1px solid #f0d5c4;
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+}
+
+@media (max-width: 900px) {
+    .nav-global {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-global-links {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .nav ul {
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .nav {
+        padding: 12px 14px;
+    }
+
+    .nav-portal-switch {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 640px) {
+    .nav-logo {
+        font-size: 1.22rem;
+    }
+
+    .nav-global-links {
+        gap: 10px;
+    }
+
+    .nav ul {
+        gap: 8px;
+        width: 100%;
+    }
+
+    .nav a {
+        font-size: 0.94rem;
+        padding: 5px 8px;
+    }
+
+    .nav-portal-switch select {
+        width: 100%;
+        max-width: 220px;
+    }
+
+    .nav-dropdown {
+        right: auto;
+        left: 0;
+        min-width: 180px;
+    }
+}

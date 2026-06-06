@@ -1,0 +1,60 @@
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    margin-top: 18px;
+}
+
+th, td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+th {
+    background: var(--surface-soft);
+    font-weight: 600;
+    color: #2a2f36;
+}
+
+tr:nth-child(even) {
+    background: #fcfdff;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover td {
+    background: #f9fbff;
+}
+
+/* Special style for comparison tables */
+.comparison table {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+}
+
+.comparison tr:hover {
+    background: #f1f4f8;
+}
+
+@media (max-width: 760px) {
+    table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        white-space: nowrap;
+    }
+
+    th,
+    td {
+        padding: 10px 11px;
+        font-size: 0.95rem;
+    }
+}

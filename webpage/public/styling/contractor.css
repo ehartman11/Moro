@@ -1,0 +1,187 @@
+.contractor-form {
+    margin-top: 16px;
+}
+
+.contractor-verification-panel {
+    margin-bottom: 12px;
+}
+
+.contractor-verification-panel form {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.contractor-form label {
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #2a2f36;
+    font-size: 0.95rem;
+}
+
+.contractor-form input[type="text"],
+.contractor-form input[type="email"],
+.contractor-form input[type="number"],
+.contractor-form input[type="datetime-local"],
+.contractor-form select,
+.contractor-form textarea {
+    width: 100%;
+}
+
+.contractor-form .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    margin-bottom: 2px;
+    font-weight: 600;
+}
+
+.contractor-form .checkbox-row input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+.contractor-form .form-actions {
+    margin-top: 16px;
+    display: flex;
+    gap: 10px;
+}
+
+.contractor-filter-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.contractor-filter-hint {
+    margin-top: 6px;
+    margin-bottom: 4px;
+}
+
+.contractor-field-note {
+    margin-top: 6px;
+    font-size: 0.9rem;
+}
+
+.contractor-form .form-actions button,
+.contractor-form .form-actions input[type="submit"] {
+    width: auto;
+    min-width: 140px;
+}
+
+.contractor-note {
+    border: 1px solid #b9d5f1;
+    background: #eef6ff;
+    color: #1f4f7a;
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    margin-bottom: 12px;
+}
+
+.contractor-divider {
+    margin: 30px 0;
+    border: 0;
+    border-top: 1px solid var(--border);
+}
+
+.contractor-links {
+    margin-top: 1rem;
+}
+
+.contractor-inline-form {
+    display: flex;
+    gap: 10px;
+    align-items: end;
+    flex-wrap: wrap;
+}
+
+.contractor-inline-form label {
+    margin: 0;
+}
+
+.contractor-inline-form select {
+    min-width: 200px;
+}
+
+.contractor-chip-row {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.contractor-chip {
+    padding: 4px 8px;
+    border: 1px solid #d8dee9;
+    border-radius: 999px;
+    text-decoration: none;
+}
+
+.contractor-chip.is-active {
+    font-weight: 600;
+}
+
+.contractor-compact-form {
+    margin-top: 0;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.contractor-compact-form input,
+.contractor-compact-form select,
+.contractor-compact-form button {
+    width: 100%;
+    margin: 0;
+}
+
+.contractor-compact-form button {
+    grid-column: 1 / -1;
+}
+
+.contractor-job-meta {
+    margin-bottom: 10px;
+}
+
+.contractor-media-thumb {
+    max-width: 110px;
+    max-height: 82px;
+    border: 1px solid #d8dee9;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.contractor-review-log {
+    margin-top: 8px;
+}
+
+.contractor-review-log-item {
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+@media (max-width: 760px) {
+    .contractor-filter-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contractor-compact-form {
+        grid-template-columns: 1fr;
+    }
+
+    .contractor-form .form-actions button,
+    .contractor-form .form-actions input[type="submit"] {
+        width: 100%;
+    }
+}

@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Moro: PHP built-in server (recommended)",
+      "type": "php",
+      "request": "launch",
+      "runtimeArgs": [
+        "-S",
+        "localhost:8000",
+        "-t",
+        "${workspaceFolder}/.."
+      ],
+      "cwd": "${workspaceFolder}",
+      "port": 0,
+      "serverReadyAction": {
+        "pattern": "Development Server (http://localhost:8000) started",
+        "uriFormat": "http://localhost:8000/webpage/public/index.php",
+        "action": "openExternally"
+      }
+    }
+  ]
+}

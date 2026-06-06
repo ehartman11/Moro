@@ -1,0 +1,123 @@
+.homes-table {
+    margin-top: 14px;
+}
+
+.homes-table td:nth-child(2) {
+    min-width: 320px;
+}
+
+.set-active-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--primary);
+    background: #eef3fc;
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.set-active-link:hover {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+}
+
+.active-home-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid #a7d6b6;
+    background: #edf9f1;
+    color: #21623a;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.homes-table tr.is-active-home td {
+    background: #f7fbff;
+}
+
+.verification-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    background: #f2f4f8;
+    color: #525d6d;
+}
+
+.verification-pill.is-unverified {
+    background: #f2f4f8;
+    color: #525d6d;
+    border-color: #dce1e9;
+}
+
+.verification-pill.is-pending_review {
+    background: #fff6dd;
+    color: #7b5d00;
+    border-color: #ebd495;
+}
+
+.verification-pill.is-verified {
+    background: #ecfbf0;
+    color: #126a34;
+    border-color: #a6deb6;
+}
+
+.verification-pill.is-rejected,
+.verification-pill.is-revoked {
+    background: #fff1f1;
+    color: #8f2d2d;
+    border-color: #efb4b4;
+}
+
+.verification-submit {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: #fff;
+    padding: 14px;
+    margin: 16px 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.verification-submit-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.verification-inputs {
+    display: grid;
+    gap: 8px;
+    min-width: 280px;
+}
+
+.verification-inputs label {
+    margin: 0;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.verification-inputs select,
+.verification-inputs input[type="file"] {
+    margin: 0;
+}
+
+@media (max-width: 760px) {
+    .homes-table {
+        min-width: 680px;
+    }
+}

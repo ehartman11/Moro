@@ -1,0 +1,137 @@
+.seeker-results-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.seeker-results {
+    min-width: 1020px;
+}
+
+.seeker-results th,
+.seeker-results td {
+    white-space: nowrap;
+}
+
+.inquiry-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    background: #f5f7fb;
+    color: #394150;
+}
+
+.inquiry-pill.is-pending {
+    background: #fff6dd;
+    color: #7b5d00;
+    border-color: #ebd495;
+}
+
+.inquiry-pill.is-accepted {
+    background: #ecfbf0;
+    color: #126a34;
+    border-color: #a6deb6;
+}
+
+.inquiry-pill.is-declined {
+    background: #fff1f1;
+    color: #8f2d2d;
+    border-color: #efb4b4;
+}
+
+.inquiry-pill.is-none {
+    background: #f2f4f8;
+    color: #525d6d;
+    border-color: #dce1e9;
+}
+
+.home-verification-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    background: #f5f7fb;
+    color: #394150;
+    text-transform: uppercase;
+}
+
+.home-verification-pill.is-verified {
+    background: #ecfbf0;
+    color: #126a34;
+    border-color: #a6deb6;
+}
+
+.home-verification-pill.is-pending {
+    background: #fff6dd;
+    color: #7b5d00;
+    border-color: #ebd495;
+}
+
+.home-verification-pill.is-rejected {
+    background: #fff1f1;
+    color: #8f2d2d;
+    border-color: #efb4b4;
+}
+
+.home-verification-pill.is-unverified {
+    background: #f2f4f8;
+    color: #525d6d;
+    border-color: #dce1e9;
+}
+
+.details-link {
+    font-weight: 600;
+}
+
+@media (max-width: 760px) {
+    .seeker-search .muted {
+        margin-bottom: 8px;
+    }
+
+    .seeker-results {
+        min-width: 920px;
+    }
+
+    .seeker-results th:first-child,
+    .seeker-results td:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 2;
+        background: #fff;
+    }
+
+    .seeker-results tr:nth-child(even) td:first-child {
+        background: #fcfdff;
+    }
+
+    .seeker-results th:first-child {
+        z-index: 3;
+        background: var(--surface-soft);
+    }
+}
+
+@media (max-width: 640px) {
+    .seeker-filters {
+        padding: 14px 12px;
+    }
+
+    .seeker-results {
+        min-width: 860px;
+        margin-top: 12px;
+    }
+
+    .details-link {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 6px;
+        background: #eef2fb;
+    }
+}

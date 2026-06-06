@@ -1,0 +1,95 @@
+.admin-verification-table {
+    margin-top: 14px;
+}
+
+.admin-filter-form {
+    align-items: end;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: minmax(160px, 220px) minmax(180px, 240px) 120px;
+    margin-top: 12px;
+    max-width: 620px;
+}
+
+.admin-filter-form .row {
+    margin: 0;
+}
+
+.admin-status-pill {
+    border-radius: 999px;
+    display: inline-block;
+    font-size: 0.78rem;
+    line-height: 1;
+    margin-top: 6px;
+    padding: 5px 8px;
+}
+
+.admin-status-pill.is-verified {
+    background: #dcefe3;
+    color: #1f6b3a;
+}
+
+.admin-status-pill.is-pending {
+    background: #fff3cd;
+    color: #7a5b00;
+}
+
+.admin-status-pill.is-rejected {
+    background: #f8d7da;
+    color: #842029;
+}
+
+.admin-status-pill.is-unverified {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.admin-doc-list {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.admin-doc-list li {
+    margin: 4px 0;
+}
+
+.admin-event-list {
+    display: grid;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.admin-event-list li {
+    border-left: 3px solid #d7dce2;
+    padding-left: 8px;
+}
+
+.admin-review-note {
+    border-left: 3px solid #d7dce2;
+    margin-top: 8px;
+    padding-left: 8px;
+}
+
+.admin-review-form {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    display: grid;
+    gap: 8px;
+}
+
+.admin-review-form select,
+.admin-review-form textarea,
+.admin-review-form button {
+    width: 100%;
+}
+
+@media (max-width: 720px) {
+    .admin-filter-form {
+        grid-template-columns: 1fr;
+    }
+}

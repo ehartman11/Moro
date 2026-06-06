@@ -1,0 +1,20 @@
+.header {
+    text-align: center;
+    padding: 74px 0 58px;
+    background: linear-gradient(180deg, #f2f5fa 0%, #ffffff 100%);
+    border-bottom: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    margin-top: 14px;
+}
+
+.header-logo {
+    max-width: 200px;
+    margin-bottom: 18px;
+}
+
+.header-subtext {
+    font-size: 1.15rem;
+    color: #555;
+    max-width: 650px;
+    margin: 0 auto;
+}

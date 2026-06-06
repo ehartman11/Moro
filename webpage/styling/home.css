@@ -1,0 +1,66 @@
+/* Benefit List */
+.benefit-list ul {
+    list-style: none;
+    margin: 50px auto;
+    padding: 0;
+    max-width: 700px;
+}
+
+.benefit-list li {
+    font-size: 1.15rem;
+    margin: 14px 0;
+    display: flex;
+    align-items: center;
+}
+
+.check {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background: #4A6FA5;
+    color: white;
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    margin-right: 12px;
+}
+
+/* Category List */
+.category-list {
+    text-align: center;
+}
+
+.category-list ul {
+    list-style: none;
+    margin: 30px auto;
+    padding: 0;
+    max-width: 600px;
+}
+
+.category-list li {
+    margin: 8px 0;
+    font-size: 1.15rem;
+    color: #333;
+}
+
+/* Feature Cards */
+.feature-grid {
+    display: grid;
+    gap: 28px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    margin-top: 60px;
+}
+
+.feature-card {
+    background: #fafafa;
+    border: 1px solid #e5e6eb;
+    border-radius: 10px;
+    padding: 26px;
+    transition: transform .2s, box-shadow .2s;
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
